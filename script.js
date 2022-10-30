@@ -34,7 +34,7 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     let exponent = Math.floor(Math.log(Math.abs(number))/Math.log(2));
     const start = 2**exponent;
     const end = 2**(exponent+1);
-    exponent = (exponent + binarySum(EXPONENT_BITS-2)) & binarySum(EXPONENT_BITS-1); 
+    exponent = (exponent + binarySum(EXPONENT_BITS-2)) // & binarySum(EXPONENT_BITS-1); 
    
     const percentage = (Math.abs(number)-start)/(end-start);
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
@@ -46,6 +46,7 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         for (let i = 0; i <= exponent; i++){
             sum+=2**i;
         }
+        console.log(sum);
         return sum;
     }
    

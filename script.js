@@ -1,7 +1,22 @@
 const numberInput = document.getElementById('number-input');
 const exponentInput = document.getElementById('exponent-input');
 const mantissaInput = document.getElementById('mantissa-input');
+const bitDOM = document.getElementById('bit-dom')
 
+const inputs = [numberInput,exponentInput,mantissaInput];
+var floatingResult;
+var bitCount = 0;
+
+Update();
+
+inputs.forEach(input=>{
+    input.addEventListener('keydown',()=>{
+        Update();
+    });
+    input.addEventListener('keyup',()=>{
+        Update();
+    });
+})
 
 
 
@@ -20,8 +35,7 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
 
     const floating = sign<<NON_SIGN_BITS | exponent<<MANTISSA_BITS | mantissa;
-    console.log(floating.toString(2));
-
+    
     function binarySum(exponent){
         let sum = 0;
         for (let i = 0; i <= exponent; i++){
@@ -29,4 +43,31 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         }
         return sum;
     }
+    console.log(floating.toString(2));
+    return floating.toString(2);
+}
+
+function Update(){ 
+    bitCount = 0;
+   
+    let floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
+    let sign;
+
+    if(Math.sign(numberInput.value) === 1){
+        document.getElementById('sign-result-dom').innerHTML = '0'
+        sign = 0;
+    }
+    else{
+        document.getElementById('sign-result-dom').innerHTML = floating[0]
+        sign = 1;
+    }
+
+    document.getElementById('expo').innerHTML = floating.slice(0+sign,parseInt(exponentInput.value)+sign)//floating.slice(0+sign,exponentInput+sign);
+    document.getElementById('mant').innerHTML = floating.slice(parseInt(exponentInput.value)+sign);
+
+    if(numberInput.value != 0){bitCount+=1;}
+    if(exponentInput.value != 0){bitCount+=parseInt(exponentInput.value);}
+    if(mantissaInput.value != 0){bitCount+=parseInt(mantissaInput.value);}
+
+    bitDOM.innerHTML = bitCount;
 }

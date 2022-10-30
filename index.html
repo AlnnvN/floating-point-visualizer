@@ -17,7 +17,7 @@
         <div class="container d-flex justify-content-center">
             <div class="container row mt-4 w-50">
                 <div class="form-floating col-12 col-lg-4 flex-fill">
-                    <input type="number" id="number-input" name="number" class="form-control ps-3 mb-3 mb-lg-0" placeholder="Number">
+                    <input type="number" ster="any" id="number-input" name="number" class="form-control ps-3 mb-3 mb-lg-0" placeholder="Number">
                     <label for="number" class="ms-3 mb-3">Number</label>
                 </div>
                 <div class="form-floating col-12 col-lg-4 flex-fill">
@@ -34,11 +34,15 @@
             <hr class="w-25">
         </div> -->
         <div class="container d-flex justify-content-center mt-4">
-            <p class="lead me-1">32</p><p class="lead"> bits in total</p>
+            <p id="bit-dom" class="lead me-1"></p><p class="lead"> bits total</p>
         </div>
 
-        <div class="container border rounded bg-dark d-flex justify-content-center align-content-center">
-            <h1 class="text-light fs-1 display-3 mt-1">010101010101101010</h2>
+        <div class="container border rounded bg-dark d-flex flex-row justify-content-center align-content-center">
+            <h1 id="sign-result-dom" class="text-light fs-1 display-3 mt-1"></h1>
+            <div class="bg-light m-2 separator" id="separator"></div>
+            <h1 id="expo" class="text-light fs-1 display-3 mt-1"></h1>
+            <div class="bg-light m-2 separator" id="separator"></div>
+            <h1 id="mant" class="text-light fs-1 display-3 mt-1"></h1>
         </div>
 
 

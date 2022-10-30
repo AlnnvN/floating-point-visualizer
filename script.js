@@ -73,6 +73,10 @@ function Update(){
 
     if(isReady)
     {
+        if(numberInput.value === ''){
+            numberInput.value = 0;
+            floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
+        }
         if(Math.sign(numberInput.value) === 1){
             resultDOM.sign.innerHTML = '0'
             sign = 0;

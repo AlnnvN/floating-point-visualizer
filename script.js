@@ -20,9 +20,10 @@ inputs.forEach(input=>{
     input.addEventListener('keyup',()=>{
         Update();
     });
+    input.addEventListener('change',()=>{
+        Update();
+    });
 })
-
-
 
 //functions
 function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){

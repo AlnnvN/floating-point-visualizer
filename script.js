@@ -1,4 +1,11 @@
+const numberInput = document.getElementById('number-input');
+const exponentInput = document.getElementById('exponent-input');
+const mantissaInput = document.getElementById('mantissa-input');
 
+
+
+
+//functions
 function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     const NON_SIGN_BITS = EXPONENT_BITS + MANTISSA_BITS;
 

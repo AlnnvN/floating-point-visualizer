@@ -2,7 +2,11 @@ const numberInput = document.getElementById('number-input');
 const exponentInput = document.getElementById('exponent-input');
 const mantissaInput = document.getElementById('mantissa-input');
 const bitDOM = document.getElementById('bit-dom')
-
+const resultDOM = {
+    sign:document.getElementById('sign-result-dom'),
+    exponent: document.getElementById('exponent-result-dom'),
+    mantissa:document.getElementById('mantissa-result-dom')
+}
 const inputs = [numberInput,exponentInput,mantissaInput];
 var floatingResult;
 var bitCount = 0;
@@ -34,7 +38,7 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     const percentage = (Math.abs(number)-start)/(end-start);
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
 
-    const floating = sign<<NON_SIGN_BITS | exponent<<MANTISSA_BITS | mantissa;
+    let floating = sign<<NON_SIGN_BITS | exponent<<MANTISSA_BITS | mantissa;
     
     function binarySum(exponent){
         let sum = 0;
@@ -43,28 +47,46 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         }
         return sum;
     }
-    console.log(floating.toString(2));
+   
+    if(number === 1)
+    {
+        return '0'+floating.toString(2);
+    }
+
+    if(number === 0)
+    {
+        for (let i = 0; i < MANTISSA_BITS+EXPONENT_BITS; i++) {
+            floating = floating + '0';
+        }
+        return floating.toString();
+    }    
     return floating.toString(2);
 }
 
 function Update(){ 
     bitCount = 0;
-   
+    let isReady = (exponentInput.value != 0 && mantissaInput.value != 0)
     let floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
     let sign;
 
-    if(Math.sign(numberInput.value) === 1){
-        document.getElementById('sign-result-dom').innerHTML = '0'
-        sign = 0;
+    if(isReady)
+    {
+        if(Math.sign(numberInput.value) === 1){
+            resultDOM.sign.innerHTML = '0'
+            sign = 0;
+        }
+        else{
+            resultDOM.sign.innerHTML = floating[0]
+            sign = 1;
+        }
+        resultDOM.exponent.innerHTML = floating.slice(0+sign,parseInt(exponentInput.value)+sign)//floating.slice(0+sign,exponentInput+sign);
+        resultDOM.mantissa.innerHTML = floating.slice(parseInt(exponentInput.value)+sign);
     }
     else{
-        document.getElementById('sign-result-dom').innerHTML = floating[0]
-        sign = 1;
+        resultDOM.sign.innerHTML = "";
+        resultDOM.exponent.innerHTML = "";
+        resultDOM.mantissa.innerHTML = "";
     }
-
-    document.getElementById('expo').innerHTML = floating.slice(0+sign,parseInt(exponentInput.value)+sign)//floating.slice(0+sign,exponentInput+sign);
-    document.getElementById('mant').innerHTML = floating.slice(parseInt(exponentInput.value)+sign);
-
     if(numberInput.value != 0){bitCount+=1;}
     if(exponentInput.value != 0){bitCount+=parseInt(exponentInput.value);}
     if(mantissaInput.value != 0){bitCount+=parseInt(mantissaInput.value);}

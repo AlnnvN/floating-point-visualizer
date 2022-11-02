@@ -1,7 +1,10 @@
 const numberInput = document.getElementById('number-input');
 const exponentInput = document.getElementById('exponent-input');
 const mantissaInput = document.getElementById('mantissa-input');
-const bitDOM = document.getElementById('bit-dom')
+const bitDOM = {
+    number: document.getElementById('bit-num-dom'),
+    text: document.getElementById('bit-text-dom')
+}
 const resultDOM = {
     sign:document.getElementById('sign-result-dom'),
     exponent: document.getElementById('exponent-result-dom'),
@@ -92,12 +95,15 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
 }
 
 function Update(){ 
-    
-    slider.number.value = numberInput.value; //assigning input values to the slider
+
+    //assigning input values to the slider
+    slider.number.value = numberInput.value; 
     slider.exponent.value = exponentInput.value;
     slider.mantissa.value = mantissaInput.value;
+    //
 
     let isReady = (exponentInput.value != 0 && mantissaInput.value != 0)
+    CountBits();
 
     if(isReady)
     {
@@ -111,14 +117,30 @@ function Update(){
         ClearResults();
     }
 
-    CountBits();
-    
+
+    //FUNCTIONS
+
     function CountBits(){
+        let exp = parseInt(exponentInput.value)
+        let man = parseInt(mantissaInput.value)
+
+        //bit counting
         bitCount = 0;
-        if(numberInput.value != 0){bitCount+=1;}
-        if(exponentInput.value != 0){bitCount+=parseInt(exponentInput.value);}
-        if(mantissaInput.value != 0){bitCount+=parseInt(mantissaInput.value);}
-        bitDOM.innerHTML = bitCount;    
+        if(isReady){ bitCount += 1;}
+        if(exp.toString() != 'NaN'){ bitCount+=exp; }
+        if(man.toString() != 'NaN'){ bitCount+=man; }
+
+        bitDOM.number.innerHTML = bitCount;  
+        
+        //treatment for >= 32 bit input
+        if((exp+man+1) >= 32){ 
+            isReady = false; 
+            bitDOM.number.classList.add('text-danger');
+            bitDOM.text.classList.add('text-danger');
+        }else{
+            bitDOM.number.classList.remove('text-danger');
+            bitDOM.text.classList.remove('text-danger');
+        }
     }
 
     function ClearResults(){

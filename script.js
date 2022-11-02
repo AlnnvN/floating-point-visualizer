@@ -10,6 +10,11 @@ const resultDOM = {
 const inputs = [numberInput,exponentInput,mantissaInput];
 var floatingResult;
 var bitCount = 0;
+const slider = {
+    number: document.getElementById('number-slider'),
+    exponent: document.getElementById('exponent-slider'),
+    mantissa: document.getElementById('mantissa-slider')
+}
 
 Update();
 
@@ -24,6 +29,20 @@ inputs.forEach(input=>{
         Update();
     });
 })
+
+slider.number.addEventListener('input',()=>{
+    numberInput.value = slider.number.value;
+    Update();
+})
+slider.exponent.addEventListener('input',()=>{
+    exponentInput.value = slider.exponent.value;
+    Update();
+})
+slider.mantissa.addEventListener('input',()=>{
+    mantissaInput.value = slider.mantissa.value;
+    Update();
+})
+
 
 //functions
 function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
@@ -70,6 +89,11 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
 
 function Update(){ 
     bitCount = 0;
+
+    slider.number.value = numberInput.value;
+    slider.exponent.value = exponentInput.value;
+    slider.mantissa.value = mantissaInput.value;
+
     let isReady = (exponentInput.value != 0 && mantissaInput.value != 0)
     let floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
     let sign;
@@ -102,3 +126,4 @@ function Update(){
 
     bitDOM.innerHTML = bitCount;
 }
+

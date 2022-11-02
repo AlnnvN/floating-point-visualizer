@@ -21,45 +21,27 @@ const slider = {
 
 Update();
 
-inputs.forEach(input=>{
-    input.addEventListener('keydown',()=>{
-        Update();
-    });
-    input.addEventListener('keyup',()=>{
-        Update();
-    });
-    input.addEventListener('change',()=>{
-        Update();
-    });
-})
-
-slider.number.addEventListener('input',()=>{
-    numberInput.value = slider.number.value;
-    Update();
-})
-slider.exponent.addEventListener('input',()=>{
-    exponentInput.value = slider.exponent.value;
-    Update();
-})
-slider.mantissa.addEventListener('input',()=>{
-    mantissaInput.value = slider.mantissa.value;
-    Update();
-})
+AddEventListeners();
 
 
-//functions
+
+//FUNCTIONS
+
 function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     const NON_SIGN_BITS = EXPONENT_BITS + MANTISSA_BITS;
 
     const sign = Math.sign(number) === -1 ? 1 : 0;
 
     let exponent = Math.floor(Math.log(Math.abs(number))/Math.log(2));
+
     const start = 2**exponent;
     const end = 2**(exponent+1);
+
     exponent = (exponent + binarySum(EXPONENT_BITS-2))  //& binarySum(EXPONENT_BITS-1); 
 
     const percentage = (Math.abs(number)-start)/(end-start);
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
+
     let floating = (sign << NON_SIGN_BITS | exponent << MANTISSA_BITS | mantissa).toString(2);
 
 
@@ -76,7 +58,7 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         {
             floating = '0' + floating;
         }
-        if(exponent-binarySum(EXPONENT_BITS-2) < 0) //fixes initial zero for negative exponents
+        if(exponent-binarySum(EXPONENT_BITS-2) <= 0) //fixes initial zero for negative exponents
         {
             floating = '0' + floating;      
         }
@@ -150,3 +132,29 @@ function Update(){
     }
 }
 
+function AddEventListeners() {
+    inputs.forEach(input => {
+        input.addEventListener('keydown', () => {
+            Update();
+        });
+        input.addEventListener('keyup', () => {
+            Update();
+        });
+        input.addEventListener('change', () => {
+            Update();
+        });
+    });
+
+    slider.number.addEventListener('input', () => {
+        numberInput.value = slider.number.value;
+        Update();
+    });
+    slider.exponent.addEventListener('input', () => {
+        exponentInput.value = slider.exponent.value;
+        Update();
+    });
+    slider.mantissa.addEventListener('input', () => {
+        mantissaInput.value = slider.mantissa.value;
+        Update();
+    });
+}

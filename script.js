@@ -57,8 +57,29 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
 
     const percentage = (Math.abs(number)-start)/(end-start);
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
-    let floating = sign<<NON_SIGN_BITS | exponent<<MANTISSA_BITS | mantissa;
-    
+    let floating = (sign << NON_SIGN_BITS | exponent << MANTISSA_BITS | mantissa).toString(2);
+
+
+    //EXCEPTIONS
+    if(number === 0 || number.toString() === 'NaN') //fixes number = NaN
+    {
+        for (let i = 1; i <= MANTISSA_BITS+EXPONENT_BITS; i++) {
+            floating = floating + '0';
+        };  
+    }
+    else{ //if there is a number assigned
+
+        if(sign === 0) //fixes initial zero for positive numbers
+        {
+            floating = '0' + floating;
+        }
+        if(exponent-binarySum(EXPONENT_BITS-2) < 0) //fixes initial zero for negative exponents
+        {
+            floating = '0' + floating;      
+        }
+    }
+
+    //FUNCTIONS
     function binarySum(exponent){
         let sum = 0;
         for (let i = 0; i <= exponent; i++){
@@ -66,64 +87,44 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         }
         return sum;
     }
-   
-    if(sign === 0)
-    {
-        floating = '0' + floating.toString(2);
-    }
-    
-    if(exponent-binarySum(EXPONENT_BITS-2) < 0)
-    {
-        floating = '0' + floating.toString(2);      
-    }
 
-    if(number === 0)
-    {
-        for (let i = 0; i < MANTISSA_BITS+EXPONENT_BITS; i++) {
-            floating = floating.toString(2) + '0';
-        };      
-    }    
-
-    return floating.toString(2);
+    return floating;
 }
 
 function Update(){ 
-    bitCount = 0;
-
-    slider.number.value = numberInput.value;
+    
+    slider.number.value = numberInput.value; //assigning input values to the slider
     slider.exponent.value = exponentInput.value;
     slider.mantissa.value = mantissaInput.value;
 
     let isReady = (exponentInput.value != 0 && mantissaInput.value != 0)
-    let floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
-    let sign;
 
     if(isReady)
     {
-        if(numberInput.value === ''){
-            numberInput.value = 0;
-            floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
-        }
-        if(Math.sign(numberInput.value) === 1){
-            resultDOM.sign.innerHTML = '0'
-            sign = 0;
-        }
-        else{
-            resultDOM.sign.innerHTML = floating[0]
-            sign = 1;
-        }
-        resultDOM.exponent.innerHTML = floating.slice(1,parseInt(exponentInput.value)+1)//floating.slice(0+sign,exponentInput+sign);
+        let floating = findFloatingPoint(parseFloat(numberInput.value),parseInt(exponentInput.value),parseInt(mantissaInput.value))
+        resultDOM.sign.innerHTML = floating[0] //assigns sign to the final result
+        //slices the final result string in 2 different parts (exponent and mantissa)
+        resultDOM.exponent.innerHTML = floating.slice(1,parseInt(exponentInput.value)+1)
         resultDOM.mantissa.innerHTML = floating.slice(parseInt(exponentInput.value)+1);
     }
     else{
+        ClearResults();
+    }
+
+    CountBits();
+    
+    function CountBits(){
+        bitCount = 0;
+        if(numberInput.value != 0){bitCount+=1;}
+        if(exponentInput.value != 0){bitCount+=parseInt(exponentInput.value);}
+        if(mantissaInput.value != 0){bitCount+=parseInt(mantissaInput.value);}
+        bitDOM.innerHTML = bitCount;    
+    }
+
+    function ClearResults(){
         resultDOM.sign.innerHTML = "";
         resultDOM.exponent.innerHTML = "";
         resultDOM.mantissa.innerHTML = "";
     }
-    if(numberInput.value != 0){bitCount+=1;}
-    if(exponentInput.value != 0){bitCount+=parseInt(exponentInput.value);}
-    if(mantissaInput.value != 0){bitCount+=parseInt(mantissaInput.value);}
-
-    bitDOM.innerHTML = bitCount;
 }
 

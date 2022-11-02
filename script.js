@@ -51,21 +51,18 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     if(sign === 0)
     {
         floating = '0' + floating.toString(2);
-        console.log(floating + "SIGN POSITIVE")
     }
     
     if(exponent-binarySum(EXPONENT_BITS-2) < 0)
     {
-        floating = '0' + floating.toString(2);
-        console.log(floating + "NEGATIVE EXPONENT")
+        floating = '0' + floating.toString(2);      
     }
 
     if(number === 0)
     {
         for (let i = 0; i < MANTISSA_BITS+EXPONENT_BITS; i++) {
             floating = floating.toString(2) + '0';
-        };
-        console.log(floating + "NUMBER IS ZERO")
+        };      
     }    
 
     return floating.toString(2);

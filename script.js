@@ -34,11 +34,10 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
     let exponent = Math.floor(Math.log(Math.abs(number))/Math.log(2));
     const start = 2**exponent;
     const end = 2**(exponent+1);
-    exponent = (exponent + binarySum(EXPONENT_BITS-2)) // & binarySum(EXPONENT_BITS-1); 
-   
+    exponent = (exponent + binarySum(EXPONENT_BITS-2))  //& binarySum(EXPONENT_BITS-1); 
+
     const percentage = (Math.abs(number)-start)/(end-start);
     const mantissa = Math.round((2**MANTISSA_BITS)*percentage);
-
     let floating = sign<<NON_SIGN_BITS | exponent<<MANTISSA_BITS | mantissa;
     
     function binarySum(exponent){
@@ -46,22 +45,29 @@ function findFloatingPoint(number, EXPONENT_BITS, MANTISSA_BITS){
         for (let i = 0; i <= exponent; i++){
             sum+=2**i;
         }
-        console.log(sum);
         return sum;
     }
    
-    if(number === 1)
+    if(sign === 0)
     {
-        return '0'+floating.toString(2);
+        floating = '0' + floating.toString(2);
+        console.log(floating + "SIGN POSITIVE")
+    }
+    
+    if(exponent-binarySum(EXPONENT_BITS-2) < 0)
+    {
+        floating = '0' + floating.toString(2);
+        console.log(floating + "NEGATIVE EXPONENT")
     }
 
     if(number === 0)
     {
         for (let i = 0; i < MANTISSA_BITS+EXPONENT_BITS; i++) {
-            floating = floating + '0';
-        }
-        return floating.toString();
+            floating = floating.toString(2) + '0';
+        };
+        console.log(floating + "NUMBER IS ZERO")
     }    
+
     return floating.toString(2);
 }
 
@@ -85,8 +91,8 @@ function Update(){
             resultDOM.sign.innerHTML = floating[0]
             sign = 1;
         }
-        resultDOM.exponent.innerHTML = floating.slice(0+sign,parseInt(exponentInput.value)+sign)//floating.slice(0+sign,exponentInput+sign);
-        resultDOM.mantissa.innerHTML = floating.slice(parseInt(exponentInput.value)+sign);
+        resultDOM.exponent.innerHTML = floating.slice(1,parseInt(exponentInput.value)+1)//floating.slice(0+sign,exponentInput+sign);
+        resultDOM.mantissa.innerHTML = floating.slice(parseInt(exponentInput.value)+1);
     }
     else{
         resultDOM.sign.innerHTML = "";
